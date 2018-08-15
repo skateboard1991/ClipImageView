@@ -33,6 +33,7 @@ class ClipImageActivity : AppCompatActivity()
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_clipimage_activity)
+        toolbar.title = getString(R.string.clip_title)
         setSupportActionBar(toolbar)
         handleIntentData()
         initClipImageView()
@@ -133,7 +134,7 @@ class ClipImageActivity : AppCompatActivity()
         val INPUT_PATH = "input_path"
         val OUTPUT_PATH = "output_path"
 
-        fun startCropImage(context: Activity, requestCode:Int,inputPath: String, outputPath: String, clipWidth: Int, clipHeight: Int, maxScale: Float = 1.0f, minScale: Float = 1.0f)
+        fun startCropImage(context: Activity, requestCode: Int, inputPath: String, outputPath: String, clipWidth: Int, clipHeight: Int, maxScale: Float = 1.0f, minScale: Float = 1.0f)
         {
             val intent = Intent(context, ClipImageActivity::class.java)
             val bundle = Bundle()
@@ -144,7 +145,7 @@ class ClipImageActivity : AppCompatActivity()
             bundle.putString(INPUT_PATH, inputPath)
             bundle.putString(OUTPUT_PATH, outputPath)
             intent.putExtras(bundle)
-            context.startActivityForResult(intent,requestCode)
+            context.startActivityForResult(intent, requestCode)
         }
     }
 }

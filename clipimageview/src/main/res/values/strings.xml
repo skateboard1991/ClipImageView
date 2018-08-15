@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">clipimageview</string>
+    <string name="clip_title">裁剪</string>
 </resources>
