@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity()
         }
         clipBtn.setOnClickListener {
 
-            ClipImageActivity.startCropImage(this, 1001, filePath.absolutePath, filePath.absolutePath, (90 * resources.displayMetrics.density).toInt(), (90 * resources.displayMetrics.density).toInt(), 2.0f, 0.5f)
+            ClipImageActivity.startCropImage(this, 1001, filePath.absolutePath, filePath.absolutePath, (160 * resources.displayMetrics.density).toInt(), (160 * resources.displayMetrics.density).toInt(), 2.0f, 0.5f)
         }
     }
 

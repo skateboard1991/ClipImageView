@@ -24,7 +24,7 @@ class ClipImageView(context: Context, attributeSet: AttributeSet?) : ImageView(c
 
     var maxScale = 1.0f
 
-    private var rectColor = Color.WHITE
+    private var rectColor = Color.BLACK
 
     private var lastTouchX = 0F
 
@@ -66,6 +66,7 @@ class ClipImageView(context: Context, attributeSet: AttributeSet?) : ImageView(c
 
     init
     {
+        paint.strokeJoin = Paint.Join.ROUND
         scaleGestureDetector = ScaleGestureDetector(context, scaleGestureDetectorListener)
         if (attributeSet != null)
         {
@@ -155,6 +156,7 @@ class ClipImageView(context: Context, attributeSet: AttributeSet?) : ImageView(c
 
     private fun drawMask(canvas: Canvas)
     {
+        paint.style = Paint.Style.FILL
         paint.color = Color.parseColor("#A0000000")
         canvas.drawRect(0.0f, 0.0f, width.toFloat(), (height / 2 - clipHeight / 2).toFloat(), paint)
         canvas.drawRect((width / 2 + clipWidth / 2).toFloat(), (height / 2 - clipHeight / 2).toFloat(), width.toFloat(), (height / 2 + clipHeight / 2).toFloat(), paint)
@@ -164,12 +166,14 @@ class ClipImageView(context: Context, attributeSet: AttributeSet?) : ImageView(c
 
     private fun drawRect(canvas: Canvas)
     {
+        paint.style = Paint.Style.FILL_AND_STROKE
         paint.color = rectColor
         paint.strokeWidth = 4.0f
-        val left: Float = (width / 2 - clipWidth / 2).toFloat() - paint.strokeWidth
-        val top: Float = (height / 2 - clipHeight / 2).toFloat() - paint.strokeWidth
-        val right: Float = (width / 2 + clipWidth / 2).toFloat() + paint.strokeWidth
-        val bottom: Float = (height / 2 + clipHeight / 2).toFloat() + paint.strokeWidth
+        val offset = paint.strokeWidth / 2
+        val left: Float = (width / 2 - clipWidth / 2).toFloat() - offset
+        val top: Float = (height / 2 - clipHeight / 2).toFloat() - offset
+        val right: Float = (width / 2 + clipWidth / 2).toFloat() + offset
+        val bottom: Float = (height / 2 + clipHeight / 2).toFloat() + offset
         canvas.drawLine(left, top, right, top, paint)
         canvas.drawLine(right, top, right, bottom, paint)
         canvas.drawLine(left, bottom, right, bottom, paint)
