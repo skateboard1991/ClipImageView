@@ -1,7 +1,6 @@
 package com.skateboard.clipimageview
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -14,6 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_clipimage_activity.*
 import java.io.File
+import java.io.FileInputStream
 
 class ClipImageActivity : AppCompatActivity()
 {
@@ -73,7 +73,7 @@ class ClipImageActivity : AppCompatActivity()
         }
     }
 
-    private val loadImageTask = object : AsyncTask<Void, Void, Bitmap>()
+    private val loadImageTask = object : AsyncTask<Void, Void, Bitmap?>()
     {
         override fun onPreExecute()
         {
@@ -81,9 +81,42 @@ class ClipImageActivity : AppCompatActivity()
             showLoadingProgress()
         }
 
-        override fun doInBackground(vararg params: Void?): Bitmap
+        override fun doInBackground(vararg params: Void?): Bitmap?
         {
-            return BitmapFactory.decodeFile(inputPath)
+            println("input path is $inputPath")
+            val options = BitmapFactory.Options()
+            options.inJustDecodeBounds = true
+            val fd = contentResolver.openFileDescriptor(Uri.parse(inputPath), "r").fileDescriptor
+            var bitmap: Bitmap? = null
+            try
+            {
+                val fdIn = FileInputStream(fd)
+                BitmapFactory.decodeStream(fdIn, null, options)
+                val sampleSize = calculateInSampleSize(options, clipImageView.width, clipImageView.height)
+                options.inSampleSize = sampleSize
+                options.inJustDecodeBounds = false
+                fdIn.reset()
+                bitmap =BitmapFactory.decodeStream(fdIn, null, options)
+                fdIn.close()
+            } catch (e: Exception)
+            {
+                e.printStackTrace()
+            }
+            return bitmap
+        }
+
+        private fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int
+        {
+            var width = options.outWidth
+            var height = options.outHeight
+            var inSampleSize = 1
+            while (width > reqWidth || height > reqHeight)
+            {
+                inSampleSize *= 2
+                width /= 2
+                height /= 2
+            }
+            return inSampleSize
         }
 
         override fun onPostExecute(result: Bitmap?)
