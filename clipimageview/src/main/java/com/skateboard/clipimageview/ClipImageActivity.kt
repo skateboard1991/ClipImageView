@@ -12,6 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_clipimage_activity.*
+import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
 
@@ -37,7 +38,6 @@ class ClipImageActivity : AppCompatActivity()
         setSupportActionBar(toolbar)
         handleIntentData()
         initClipImageView()
-        decodeImage()
     }
 
     private fun handleIntentData()
@@ -71,6 +71,9 @@ class ClipImageActivity : AppCompatActivity()
             }
 
         }
+        clipImageView.post {
+            decodeImage()
+        }
     }
 
     private val loadImageTask = object : AsyncTask<Void, Void, Bitmap?>()
@@ -83,22 +86,23 @@ class ClipImageActivity : AppCompatActivity()
 
         override fun doInBackground(vararg params: Void?): Bitmap?
         {
-            println("input path is $inputPath")
             val options = BitmapFactory.Options()
             options.inJustDecodeBounds = true
             val fd = contentResolver.openFileDescriptor(Uri.parse(inputPath), "r").fileDescriptor
             var bitmap: Bitmap? = null
             try
             {
-                val fdIn = FileInputStream(fd)
+                val fdIn = BufferedInputStream(FileInputStream(fd))
+                fdIn.mark(fdIn.available())
                 BitmapFactory.decodeStream(fdIn, null, options)
                 val sampleSize = calculateInSampleSize(options, clipImageView.width, clipImageView.height)
                 options.inSampleSize = sampleSize
                 options.inJustDecodeBounds = false
                 fdIn.reset()
-                bitmap =BitmapFactory.decodeStream(fdIn, null, options)
+                bitmap = BitmapFactory.decodeStream(fdIn, null, options)
                 fdIn.close()
-            } catch (e: Exception)
+            }
+            catch (e: Exception)
             {
                 e.printStackTrace()
             }
