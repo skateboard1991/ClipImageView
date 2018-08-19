@@ -47,8 +47,9 @@ class MainActivity : AppCompatActivity()
             if(requestCode==1002)
             {
                 data?.let {
-                    
-                    ClipImageActivity.startCropImage(this, 1001, it.dataString, filePath.absolutePath, (160 * resources.displayMetrics.density).toInt(), (160 * resources.displayMetrics.density).toInt(), 2.0f, 0.5f)
+
+                    ClipImageActivity.startCropImage(this, 1001, it.dataString, filePath.absolutePath, (260 * resources.displayMetrics.density).toInt(), (260 * resources
+                            .displayMetrics.density).toInt(), 2.0f, 0.5f)
                 }
             }
             else

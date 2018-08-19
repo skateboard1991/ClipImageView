@@ -17,8 +17,24 @@ class ClipImageView(context: Context, attributeSet: AttributeSet?) : ImageView(c
     private val paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     var clipWidth = 300
+        set(value)
+        {
+            field = value
+            if (isAttachedToWindow)
+            {
+                postInvalidate()
+            }
+        }
 
     var clipHeight = 300
+        set(value)
+        {
+            field = value
+            if (isAttachedToWindow)
+            {
+                postInvalidate()
+            }
+        }
 
     var minScale = 1.0f
 
@@ -107,7 +123,8 @@ class ClipImageView(context: Context, attributeSet: AttributeSet?) : ImageView(c
         {
             isTouching = false
             return scaleGestureDetector.onTouchEvent(event)
-        } else
+        }
+        else
         {
             when (event?.action)
             {
@@ -219,7 +236,8 @@ class ClipImageView(context: Context, attributeSet: AttributeSet?) : ImageView(c
             val bitmap = Bitmap.createBitmap(clipBitmap, width / 2 - clipWidth / 2, height / 2 - clipHeight / 2, clipWidth, clipHeight, transMatrix, true)
             bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
             outputStream.close()
-        } catch (e: IOException)
+        }
+        catch (e: IOException)
         {
             e.printStackTrace()
         }
