@@ -9,4 +9,8 @@
 
 
 
+核心控件就是ClipImageView
+
+
+
 
