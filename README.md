@@ -1,4 +1,7 @@
 # ClipImageView
+
+![](https://github.com/skateboard1991/ClipImageView/blob/master/show.gif)
+
 用法
 ```
     fun startCropImage(context: Activity, requestCode: Int, inputPath: String, outputPath: String, clipWidth: Int, clipHeight: Int, maxScale: Float = 1.0f, minScale: Float = 1.0f)
